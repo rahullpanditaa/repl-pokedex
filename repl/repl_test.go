@@ -6,32 +6,28 @@ import (
 )
 
 func TestCleanInput(t *testing.T) {
+	assertSlices := func(t testing.TB, got, want []string, input string) {
+		if !slices.Equal(got, want) {
+			t.Errorf("got %v want %v given, %s", got, want, input)
+		}
+	}
 	t.Run("uppercase words", func(t *testing.T) {
 		inputString := "ThIs teXT has some UPPERCASE leTTERS"
-		got := cleanInput(inputString)
+		got := CleanInput(inputString)
 		want := []string{"this", "text", "has", "some", "uppercase", "letters"}
-
-		if !slices.Equal(got, want) {
-			t.Errorf("got %v want %v given, %s", got, want, inputString)
-		}
+		assertSlices(t, got, want, inputString)
 	})
 	t.Run("sanitized text", func(t *testing.T) {
 		inputString := "hello world"
-		got := cleanInput(inputString)
+		got := CleanInput(inputString)
 		want := []string{"hello", "world"}
-
-		if !slices.Equal(got, want) {
-			t.Errorf("got %v want %v given, %s", got, want, inputString)
-		}
+		assertSlices(t, got, want, inputString)
 	})
 	t.Run("uppercase and extra whitespace", func(t *testing.T) {
 		inputString := "   This TEXT has leading And trailing whitespace   "
-		got := cleanInput(inputString)
+		got := CleanInput(inputString)
 		want := []string{"this", "text", "has", "leading", "and", "trailing", "whitespace"}
-
-		if !slices.Equal(got, want) {
-			t.Errorf("got %v want %v given, %s", got, want, inputString)
-		}
+		assertSlices(t, got, want, inputString)
 	})
 
 }
