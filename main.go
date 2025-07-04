@@ -20,7 +20,9 @@ func main() {
 
 		if command, exists := repl.CommandsRegistry[firstWord]; exists {
 			err := command.Callback()
-			fmt.Println(err)
+			if err != nil {
+				fmt.Println(err)
+			}
 		} else {
 			fmt.Println("Unknown command")
 		}
