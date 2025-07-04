@@ -17,7 +17,13 @@ func main() {
 		input := scanner.Text()
 		cleanedInput := repl.CleanInput(input)
 		firstWord := cleanedInput[0]
-		fmt.Printf("Your command was: %s\n", firstWord)
+
+		if command, exists := repl.CommandsRegistry[firstWord]; exists {
+			err := command.Callback()
+			fmt.Println(err)
+		} else {
+			fmt.Println("Unknown command")
+		}
 	}
 
 }
