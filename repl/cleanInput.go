@@ -1,5 +1,8 @@
 package repl
 
+import "strings"
+
 func cleanInput(text string) []string {
-	return []string{}
+	textLowercase := strings.Trim(strings.ToLower(text), " ")
+	return strings.Split(textLowercase, " ")
 }
