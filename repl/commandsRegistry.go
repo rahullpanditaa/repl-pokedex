@@ -1,5 +1,9 @@
 package repl
 
+import (
+	"github.com/rahullpanditaa/repl-pokedex/cache"
+)
+
 type CliCommand struct {
 	Name        string
 	Description string
@@ -19,6 +23,11 @@ func init() {
 			Name:        "help",
 			Description: "Displays a help message",
 			Callback:    CommandHelp,
+		},
+		"map": {
+			Name:        "map",
+			Description: "Display the names of 20 location areas",
+			Callback:    cache.CommandMap,
 		},
 	}
 }

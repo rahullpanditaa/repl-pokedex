@@ -13,7 +13,7 @@ type Response struct {
 	} `json:"results"`
 }
 
-func MapCommand() {
+func CommandMap() error {
 	// display the names of 20 location area in the pokemon
 	// world
 
@@ -44,4 +44,6 @@ func MapCommand() {
 	for _, area := range resp.Results {
 		fmt.Println(area.Name)
 	}
+
+	return nil
 }
