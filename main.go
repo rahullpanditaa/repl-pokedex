@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/rahullpanditaa/repl-pokedex/repl"
-	// "github.com/rahullpanditaa/repl-pokedex/cache"
 )
 
 func main() {
@@ -27,6 +26,4 @@ func main() {
 			fmt.Println("Unknown command")
 		}
 	}
-	// cache.MapCommand()
-
 }
