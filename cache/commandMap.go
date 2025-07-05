@@ -7,6 +7,12 @@ import (
 	"net/http"
 )
 
+type Response struct {
+	Results []struct {
+		Name string `json:"name"`
+	} `json:"results"`
+}
+
 func MapCommand() {
 	// display the names of 20 location area in the pokemon
 	// world
@@ -22,13 +28,20 @@ func MapCommand() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer res.Body.Close()
 
-	var areas any
+	// reading response body into a slice of bytes
+	// body, err := io.ReadAll(res.Body)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	var resp Response
 	decoder := json.NewDecoder(res.Body)
-	if err := decoder.Decode(&areas); err != nil {
+	if err := decoder.Decode(&resp); err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(areas)
-
+	for _, area := range resp.Results {
+		fmt.Println(area.Name)
+	}
 }
