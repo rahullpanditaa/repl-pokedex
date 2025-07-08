@@ -9,7 +9,6 @@ type CliCommand struct {
 }
 
 var CommandsRegistry map[string]CliCommand
-var ConfigUrl utils.Config
 
 func init() {
 	CommandsRegistry = map[string]CliCommand{
@@ -27,6 +26,11 @@ func init() {
 			Name:        "map",
 			Description: "Display the names of 20 location areas",
 			Callback:    CommandMap,
+		},
+		"mapb": {
+			Name:        "mapb",
+			Description: "Go back a page",
+			Callback:    CommandMapBack,
 		},
 	}
 }

@@ -19,7 +19,7 @@ func main() {
 		firstWord := cleanedInput[0]
 
 		if command, exists := commands.CommandsRegistry[firstWord]; exists {
-			err := command.Callback(&commands.ConfigUrl)
+			err := command.Callback(&utils.Urls)
 			if err != nil {
 				fmt.Println(err)
 			}

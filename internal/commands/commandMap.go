@@ -23,8 +23,16 @@ func CommandMap(config *utils.Config) error {
 	// display the names of 20 location area in the pokemon
 	// world
 
+	var nextPageUrl string
+	if config.NextURL == "" {
+		nextPageUrl = utils.BaseURL
+		// fmt.Println("you're on the last page")
+	} else {
+		nextPageUrl = config.NextURL
+	}
+
 	// create a request
-	req, err := http.NewRequest("GET", utils.BaseURL, nil)
+	req, err := http.NewRequest("GET", nextPageUrl, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -53,8 +61,14 @@ func CommandMap(config *utils.Config) error {
 
 	if resp.Previous == nil {
 		config.PreviousURL = ""
+	} else {
+		config.PreviousURL = *resp.Previous
 	}
-	config.NextURL = *resp.Next
+	if resp.Next == nil {
+		config.NextURL = ""
+	} else {
+		config.NextURL = *resp.Next
+	}
 
 	return nil
 }
