@@ -1,12 +1,15 @@
 package commands
 
+import "github.com/rahullpanditaa/repl-pokedex/internal/utils"
+
 type CliCommand struct {
 	Name        string
 	Description string
-	Callback    func() error
+	Callback    func(*utils.Config) error
 }
 
 var CommandsRegistry map[string]CliCommand
+var ConfigUrl utils.Config
 
 func init() {
 	CommandsRegistry = map[string]CliCommand{

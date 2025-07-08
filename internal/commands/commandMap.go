@@ -5,20 +5,26 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/rahullpanditaa/repl-pokedex/internal/utils"
 )
 
 type Response struct {
-	Results []struct {
+	Count    int     `json:"count"`
+	Next     *string `json:"next"`
+	Previous *string `json:"previous"`
+	Results  []struct {
 		Name string `json:"name"`
+		URL  string `json:"url"`
 	} `json:"results"`
 }
 
-func CommandMap() error {
+func CommandMap(config *utils.Config) error {
 	// display the names of 20 location area in the pokemon
 	// world
 
 	// create a request
-	req, err := http.NewRequest("GET", "https://pokeapi.co/api/v2/location-area/", nil)
+	req, err := http.NewRequest("GET", utils.BaseURL, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,6 +50,11 @@ func CommandMap() error {
 	for _, area := range resp.Results {
 		fmt.Println(area.Name)
 	}
+
+	if resp.Previous == nil {
+		config.PreviousURL = ""
+	}
+	config.NextURL = *resp.Next
 
 	return nil
 }

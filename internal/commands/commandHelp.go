@@ -1,8 +1,12 @@
 package commands
 
-import "fmt"
+import (
+	"fmt"
 
-func CommandHelp() error {
+	"github.com/rahullpanditaa/repl-pokedex/internal/utils"
+)
+
+func CommandHelp(*utils.Config) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println()
