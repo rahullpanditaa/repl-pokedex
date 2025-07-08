@@ -11,11 +11,14 @@ import (
 
 func CommandMapBack(config *utils.Config) error {
 
-	if utils.Urls.PreviousURL == "" {
+	var previousPageUrl string
+	if config.PreviousURL == "" {
 		fmt.Println("you're on the first page")
 		return nil
+	} else {
+		previousPageUrl = config.PreviousURL
 	}
-	req, err := http.NewRequest("GET", utils.BaseURL, nil)
+	req, err := http.NewRequest("GET", previousPageUrl, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
