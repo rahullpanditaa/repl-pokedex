@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/rahullpanditaa/repl-pokedex/repl"
+	"github.com/rahullpanditaa/repl-pokedex/internal/commands"
+	"github.com/rahullpanditaa/repl-pokedex/internal/utils"
 )
 
 func main() {
@@ -14,10 +15,10 @@ func main() {
 		scanner := bufio.NewScanner(os.Stdin)
 		scanner.Scan()
 		input := scanner.Text()
-		cleanedInput := repl.CleanInput(input)
+		cleanedInput := utils.CleanInput(input)
 		firstWord := cleanedInput[0]
 
-		if command, exists := repl.CommandsRegistry[firstWord]; exists {
+		if command, exists := commands.CommandsRegistry[firstWord]; exists {
 			err := command.Callback()
 			if err != nil {
 				fmt.Println(err)
