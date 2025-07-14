@@ -22,10 +22,10 @@ func init() {
 			Description: "Displays a help message",
 			Callback:    CommandHelp,
 		},
-		"map": {
-			Name:        "map",
+		"mapf": {
+			Name:        "mapf",
 			Description: "Display the names of 20 location areas",
-			Callback:    CommandMap,
+			Callback:    CommandMapForward,
 		},
 		"mapb": {
 			Name:        "mapb",

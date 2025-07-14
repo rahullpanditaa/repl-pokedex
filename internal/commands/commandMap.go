@@ -19,7 +19,7 @@ type Response struct {
 	} `json:"results"`
 }
 
-func CommandMap(config *utils.Config) error {
+func CommandMapForward(config *utils.Config) error {
 	// display the names of 20 location area in the pokemon
 	// world
 
