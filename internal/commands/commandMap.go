@@ -20,7 +20,7 @@ type Response struct {
 	} `json:"results"`
 }
 
-func CommandMapForward(config *utils.Config) error {
+func CommandMapForward(config *utils.Config, areaName string) error {
 	var nextPageUrl string
 	if config.NextURL == "" {
 		nextPageUrl = utils.BaseURL

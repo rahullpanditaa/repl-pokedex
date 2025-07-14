@@ -6,7 +6,7 @@ import (
 	"github.com/rahullpanditaa/repl-pokedex/internal/utils"
 )
 
-func CommandHelp(*utils.Config) error {
+func CommandHelp(config *utils.Config, areaName string) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println()

@@ -10,7 +10,7 @@ import (
 	"github.com/rahullpanditaa/repl-pokedex/internal/utils"
 )
 
-func CommandMapBack(config *utils.Config) error {
+func CommandMapBack(config *utils.Config, areaName string) error {
 	var previousPageUrl string
 	if config.PreviousURL == "" {
 		fmt.Println("you're on the first page")

@@ -5,7 +5,7 @@ import "github.com/rahullpanditaa/repl-pokedex/internal/utils"
 type CliCommand struct {
 	Name        string
 	Description string
-	Callback    func(*utils.Config) error
+	Callback    func(*utils.Config, string) error
 }
 
 var CommandsRegistry map[string]CliCommand
@@ -31,6 +31,11 @@ func init() {
 			Name:        "mapb",
 			Description: "Go back a page",
 			Callback:    CommandMapBack,
+		},
+		"explore": {
+			Name:        "explore",
+			Description: "Explore an area, show all pokemons present",
+			Callback:    CommandExplore,
 		},
 	}
 }
