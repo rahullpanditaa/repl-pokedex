@@ -20,7 +20,7 @@ func NewCache(interval time.Duration) Cache {
 		cacheEntries: make(map[string]cacheEntry),
 		mut:          &sync.Mutex{},
 	}
-	go c.reapLoop(interval)
+	// go c.reapLoop(interval)
 	return c
 }
 
@@ -37,22 +37,22 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	return value.val, exists
 }
 
-func (c *Cache) reapLoop(interval time.Duration) {
-	ticker := time.NewTicker(interval)
-	for range ticker.C {
-		c.reap(time.Now().UTC(), interval)
-	}
-}
+// func (c *Cache) reapLoop(interval time.Duration) {
+// 	ticker := time.NewTicker(interval)
+// 	for range ticker.C {
+// 		c.reap(time.Now().UTC(), interval)
+// 	}
+// }
 
-func (c *Cache) reap(now time.Time, last time.Duration) {
-	c.mut.Lock()
-	defer c.mut.Unlock()
-	for k, v := range c.cacheEntries {
-		if v.createdAt.Before(now.Add(-last)) {
-			delete(c.cacheEntries, k)
-		}
-	}
-}
+// func (c *Cache) reap(now time.Time, last time.Duration) {
+// 	c.mut.Lock()
+// 	defer c.mut.Unlock()
+// 	for k, v := range c.cacheEntries {
+// 		if v.createdAt.Before(now.Add(-last)) {
+// 			delete(c.cacheEntries, k)
+// 		}
+// 	}
+// }
 
 // creating an empty cache
-var ApiCache = NewCache(time.Second * 5)
+var ApiCache = NewCache(time.Second * 20)

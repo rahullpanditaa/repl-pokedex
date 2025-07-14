@@ -23,7 +23,12 @@ func CommandMapBack(config *utils.Config) error {
 	apiResp, respExists := pokecache.ApiCache.Get(previousPageUrl)
 	if respExists {
 		fmt.Println("Retrieving from cache...")
-		for area := range apiResp {
+		var locationAreas []string
+		err := json.Unmarshal(apiResp, &locationAreas)
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, area := range locationAreas {
 			fmt.Println(area)
 		}
 		return nil
@@ -40,14 +45,10 @@ func CommandMapBack(config *utils.Config) error {
 		}
 		defer res.Body.Close()
 
-		// have the json response, need to decode it
 		decoder := json.NewDecoder(res.Body)
 		if err := decoder.Decode(&resp); err != nil {
 			log.Fatal(err)
 		}
-
-		// add slice of location areas to cache
-		// pokecache.ApiCache.Add(previousPageUrl, resp.Results)
 
 		var locationAreas []string
 		for _, area := range resp.Results {
@@ -73,41 +74,4 @@ func CommandMapBack(config *utils.Config) error {
 		}
 	}
 	return nil
-
-	// var resp Response
-
-	// req, err := http.NewRequest("GET", previousPageUrl, nil)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// client := &http.Client{}
-	// res, err := client.Do(req)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// defer res.Body.Close()
-
-	// // var resp Response
-	// decoder := json.NewDecoder(res.Body)
-	// if err := decoder.Decode(&resp); err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// for _, area := range resp.Results {
-	// 	fmt.Println(area.Name)
-	// }
-
-	// if resp.Previous == nil {
-	// 	config.PreviousURL = ""
-	// } else {
-	// 	config.PreviousURL = *resp.Previous
-	// }
-	// if resp.Next == nil {
-	// 	config.NextURL = ""
-	// } else {
-	// 	config.NextURL = *resp.Next
-	// }
-
-	// return nil
 }

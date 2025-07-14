@@ -31,7 +31,12 @@ func CommandMapForward(config *utils.Config) error {
 	apiResp, respExists := pokecache.ApiCache.Get(nextPageUrl)
 	if respExists {
 		fmt.Println("Retrieving from cache...")
-		for area := range apiResp {
+		var locationAreas []string
+		err := json.Unmarshal(apiResp, &locationAreas)
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, area := range locationAreas {
 			fmt.Println(area)
 		}
 		return nil
@@ -58,7 +63,7 @@ func CommandMapForward(config *utils.Config) error {
 			fmt.Println(area.Name)
 			locationAreas = append(locationAreas, area.Name)
 		}
-		// pokecache.ApiCache.Add(previousPageUrl, []byte(locationAreas))
+
 		cacheData, err := json.Marshal(locationAreas)
 		if err != nil {
 			log.Fatal(err)
@@ -77,42 +82,4 @@ func CommandMapForward(config *utils.Config) error {
 		}
 	}
 	return nil
-
-	// var resp Response
-
-	// req, err := http.NewRequest("GET", nextPageUrl, nil)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// client := &http.Client{}
-
-	// res, err := client.Do(req)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// defer res.Body.Close()
-
-	// // var resp Response
-	// decoder := json.NewDecoder(res.Body)
-	// if err := decoder.Decode(&resp); err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// for _, area := range resp.Results {
-	// 	fmt.Println(area.Name)
-	// }
-
-	// if resp.Previous == nil {
-	// 	config.PreviousURL = ""
-	// } else {
-	// 	config.PreviousURL = *resp.Previous
-	// }
-	// if resp.Next == nil {
-	// 	config.NextURL = ""
-	// } else {
-	// 	config.NextURL = *resp.Next
-	// }
-
-	// return nil
 }
