@@ -26,3 +26,8 @@ func NewCache(interval time.Duration) Cache {
 func (c *Cache) Add(key string, val []byte) {
 	c.cacheEntries[key] = cacheEntry{time.Now(), val}
 }
+
+func (c *Cache) Get(key string) ([]byte, bool) {
+	value, exists := c.cacheEntries[key]
+	return value.val, exists
+}
