@@ -48,14 +48,10 @@ func CommandMapForward(config *utils.Config) error {
 		}
 		defer res.Body.Close()
 
-		// have the json response, need to decode it
 		decoder := json.NewDecoder(res.Body)
 		if err := decoder.Decode(&resp); err != nil {
 			log.Fatal(err)
 		}
-
-		// add slice of location areas to cache
-		// pokecache.ApiCache.Add(previousPageUrl, resp.Results)
 
 		var locationAreas []string
 		for _, area := range resp.Results {
