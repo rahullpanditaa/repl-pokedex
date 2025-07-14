@@ -6,11 +6,11 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/rahullpanditaa/repl-pokedex/internal/pokecache"
 	"github.com/rahullpanditaa/repl-pokedex/internal/utils"
 )
 
 func CommandMapBack(config *utils.Config) error {
-
 	var previousPageUrl string
 	if config.PreviousURL == "" {
 		fmt.Println("you're on the first page")
@@ -18,38 +18,96 @@ func CommandMapBack(config *utils.Config) error {
 	} else {
 		previousPageUrl = config.PreviousURL
 	}
-	req, err := http.NewRequest("GET", previousPageUrl, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	client := &http.Client{}
-	res, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer res.Body.Close()
-
-	var resp Response
-	decoder := json.NewDecoder(res.Body)
-	if err := decoder.Decode(&resp); err != nil {
-		log.Fatal(err)
-	}
-
-	for _, area := range resp.Results {
-		fmt.Println(area.Name)
-	}
-
-	if resp.Previous == nil {
-		config.PreviousURL = ""
+	// cache has url and corresponding list of 20 location areas
+	apiResp, respExists := pokecache.ApiCache.Get(previousPageUrl)
+	if respExists {
+		fmt.Println("Retrieving from cache...")
+		for area := range apiResp {
+			fmt.Println(area)
+		}
+		return nil
 	} else {
-		config.PreviousURL = *resp.Previous
-	}
-	if resp.Next == nil {
-		config.NextURL = ""
-	} else {
-		config.NextURL = *resp.Next
-	}
+		var resp Response
+		req, err := http.NewRequest("GET", previousPageUrl, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		client := &http.Client{}
+		res, err := client.Do(req)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer res.Body.Close()
 
+		// have the json response, need to decode it
+		decoder := json.NewDecoder(res.Body)
+		if err := decoder.Decode(&resp); err != nil {
+			log.Fatal(err)
+		}
+
+		// add slice of location areas to cache
+		// pokecache.ApiCache.Add(previousPageUrl, resp.Results)
+
+		var locationAreas []string
+		for _, area := range resp.Results {
+			fmt.Println(area.Name)
+			locationAreas = append(locationAreas, area.Name)
+		}
+		// pokecache.ApiCache.Add(previousPageUrl, []byte(locationAreas))
+		cacheData, err := json.Marshal(locationAreas)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pokecache.ApiCache.Add(previousPageUrl, cacheData)
+
+		if resp.Previous == nil {
+			config.PreviousURL = ""
+		} else {
+			config.PreviousURL = *resp.Previous
+		}
+		if resp.Next == nil {
+			config.NextURL = ""
+		} else {
+			config.NextURL = *resp.Next
+		}
+	}
 	return nil
+
+	// var resp Response
+
+	// req, err := http.NewRequest("GET", previousPageUrl, nil)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// client := &http.Client{}
+	// res, err := client.Do(req)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// defer res.Body.Close()
+
+	// // var resp Response
+	// decoder := json.NewDecoder(res.Body)
+	// if err := decoder.Decode(&resp); err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// for _, area := range resp.Results {
+	// 	fmt.Println(area.Name)
+	// }
+
+	// if resp.Previous == nil {
+	// 	config.PreviousURL = ""
+	// } else {
+	// 	config.PreviousURL = *resp.Previous
+	// }
+	// if resp.Next == nil {
+	// 	config.NextURL = ""
+	// } else {
+	// 	config.NextURL = *resp.Next
+	// }
+
+	// return nil
 }

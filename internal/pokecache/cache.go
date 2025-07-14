@@ -54,22 +54,5 @@ func (c *Cache) reap(now time.Time, last time.Duration) {
 	}
 }
 
-// func (c *Cache) reapLoop(interval time.Duration) {
-// 	// this function will be called when the cache
-// 	// is created by the NewCache function
-// 	// each time an interval passes, remove any entries
-// 	// from cacheEntries that are older than interval
-// 	ticker := time.NewTicker(interval)
-// 	// channel that sends current time on channel after
-// 	// each tick; period b/w ticks specified by interval
-// 	for range ticker.C {
-// 		c.mut.Lock()
-// 		defer c.mut.Unlock()
-// 		for key, value := range c.cacheEntries {
-// 			if value.createdAt.Before(<-time.Tick(interval)) {
-// 				delete(c.cacheEntries, key)
-// 			}
-// 		}
-// 		close(time.Tick(interval))
-// 	}
-// }
+// creating an empty cache
+var ApiCache = NewCache(time.Second * 5)
