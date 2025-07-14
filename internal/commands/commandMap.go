@@ -44,11 +44,6 @@ func CommandMap(config *utils.Config) error {
 	}
 	defer res.Body.Close()
 
-	// reading response body into a slice of bytes
-	// body, err := io.ReadAll(res.Body)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 	var resp Response
 	decoder := json.NewDecoder(res.Body)
 	if err := decoder.Decode(&resp); err != nil {
